@@ -122,3 +122,10 @@ def setup_database():
 
 if __name__ == "__main__":
     setup_database()
+
+from app import db, app  # replace with your actual file name
+
+with app.app_context():
+    db.create_all()
+    print("✅ Database tables created!")
+

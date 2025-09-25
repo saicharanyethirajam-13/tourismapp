@@ -1,10 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3, os
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Get DB URL from environment (Render will provide it)
+database_url = os.environ.get("DATABASE_URL", "postgresql://tourism_db_om3h_user:DyXP7CqoUNBWqJCq0j1vuFKq1kce4kqQ@dpg-d3ar6r0dl3ps738stdl0-a/tourism_db_om3h")
+
+# Render sometimes gives 'postgres://' instead of 'postgresql://'
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
 
 # --- Database Setup ---
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
