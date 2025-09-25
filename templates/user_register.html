@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Registration - Tourism Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      z-index: 1;
+      position: relative;
+    }
+
+    .container h2 {
+      font-size: 26px;
+      color: #003566;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #003566;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.6);
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #0077b6;
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 119, 182, 0.2);
+    }
+
+    .error-message {
+      color: #d00000;
+      font-size: 13px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005f8f;
+    }
+
+    p {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    a {
+      color: #0077b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Create Your Account</h2>
+
+    <!-- Error placeholder -->
+    {% if error %}
+    <div id="errorMessage" class="error-message">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('user_register') }}">
+      <div class="input-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="John Doe" required>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter a strong password" required>
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+    
+    <p>Already have an account? <a href="{{ url_for('user_login') }}">Login here</a></p>
+    <p><a href="{{ url_for('index') }}">← Back to Home</a></p>
+  </div>
+
+</body>
+</html>

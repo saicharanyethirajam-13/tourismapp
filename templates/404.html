@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 - Page Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      color: #023e8a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .error-container {
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+
+    .error-container h1 {
+      font-size: 60px;
+      color: #0077b6;
+      margin-bottom: 10px;
+    }
+
+    .error-container h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .error-container p {
+      font-size: 15px;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .error-container a {
+      text-decoration: none;
+      background: #0077b6;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .error-container a:hover {
+      background: #023e8a;
+    }
+
+    @media (max-width: 600px) {
+      .error-container {
+        padding: 30px 20px;
+      }
+
+      .error-container h1 {
+        font-size: 48px;
+      }
+
+      .error-container h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <h1>404</h1>
+    <h2>Oops! Page not found</h2>
+    <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+    <a href="{{ url_for('admin_

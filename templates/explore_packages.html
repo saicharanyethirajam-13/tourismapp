@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore Packages - Tourism Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #023e8a;
+      padding: 20px 40px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 26px;
+    }
+
+    .back-btn-container {
+      padding: 20px 40px 0;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background-color: #0077b6;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #005f8d;
+    }
+
+    .container {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      flex: 1;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(6px);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      object-fit: cover;
+      max-height: 160px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      color: #023e8a;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #0077b6;
+      font-size: 16px;
+      margin-top: 6px;
+    }
+
+    .book-btn {
+      display: inline-block;
+      margin-top: 12px;
+      background-color: #00b4d8;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .book-btn:hover {
+      background-color: #0077b6;
+    }
+
+    .no-packages {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: #555;
+      grid-column: 1/-1;
+      padding: 50px 0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #333;
+      background: rgba(255,255,255,0.6);
+      padding: 15px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌍 Explore Our Travel Packages</h1>
+  </header>
+
+  <div class="back-btn-container">
+    <a href="{{ url_for('main_dashboard') }}" class="back-btn">🔙 Back to Dashboard</a>
+  </div>
+
+  <div class="container">
+    {% if packages %}
+      {% for pkg in packages %}
+      <div class="card">
+        {% if pkg.image_url %}
+          <img src="{{ pkg.image_url }}" alt="{{ pkg.title }}">
+        {% endif %}
+        <h3>{{ pkg.title }}</h3>
+        <p><strong>Destination:</strong> {{ pkg.destination }}</p>
+        <p><strong>Duration:</strong> {{ pkg.duration }}</p>
+        <p><strong>Status:</strong> {{ pkg.status }}</p>
+        <p class="price">₹{{ pkg.price }}</p>
+        <a href="{{ url_for('book_package', package_id=pkg.id) }}" class="book-btn">Book Now</a>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-packages">⚠ No travel packages available at the moment. Please check back later.</div>
+    {% endif %}
+  </div>
+
+  <footer>
+    &copy; 2025 TravelEase | All Rights Reserved.
+  </footer>
+
+</body>
+</html>

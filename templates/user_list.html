@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User List - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { display: flex; min-height: 100vh; background: linear-gradient(to right, #eef7ff, #e0f7fa); }
+    .sidebar { width: 250px; background-color: #023e8a; padding: 30px 20px; color: white; display: flex; flex-direction: column; gap: 25px; }
+    .sidebar h2 { font-size: 22px; margin-bottom: 10px; }
+    .nav-link { text-decoration: none; color: white; margin: 10px 0; display: block; font-size: 15px; transition: background-color 0.3s; padding: 8px 12px; border-radius: 6px; }
+    .nav-link:hover, .nav-link.active { background-color: #0077b6; }
+    .main-content { flex: 1; padding: 30px; }
+    .header { margin-bottom: 30px; }
+    .header h1 { font-size: 24px; color: #023e8a; }
+    table { width: 100%; border-collapse: collapse; background-color: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden; }
+    th, td { padding: 14px 18px; text-align: left; font-size: 15px; border-bottom: 1px solid #eaeaea; }
+    th { background-color: #0077b6; color: white; }
+    tr:nth-child(even) { background-color: #f1f9ff; }
+    tr:hover { background-color: #e0f7fa; }
+    td { color: #333; }
+    .empty-row { text-align: center; padding: 20px; color: #666; font-style: italic; }
+    footer { margin-top: 40px; text-align: center; font-size: 13px; color: #666; }
+    @media (max-width: 700px) { .sidebar { display: none; } .main-content { padding: 20px; } table { font-size: 13px; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>🛠️ Admin Panel</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+    <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
+    <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
+    <a href="{{ url_for('view_users') }}" class="nav-link active">👥 View Users</a>
+    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback</a>
+    <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="header"><h1>Registered Users</h1></div>
+
+    <table>
+      <thead>
+        <tr><th>User ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>Registration Date</th></tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.full_name or "N/A" }}</td>
+            <td>{{ user.email or "N/A" }}</td>
+            <td>{{ user.phone or "N/A" }}</td>
+            <td>
+              {% if user.registration_date %}
+                {{ user.registration_date.strftime('%Y-%m-%d') if user.registration_date.__class__.__name__ == "datetime" else user.registration_date }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="empty-row">No users registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <footer>&copy; 2025 Tourism Management System. Admin Panel.</footer>
+  </main>
+</body>
+</html>

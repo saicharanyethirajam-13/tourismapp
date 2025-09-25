@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Login - Tourism Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 420px;
+      color: #333;
+      z-index: 1;
+      position: relative;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 26px;
+      color: #003566;
+    }
+
+    .flash {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .flash.error { background-color: #ffdddd; color: #a30000; }
+    .flash.success { background-color: #ddffdd; color: #006600; }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    input::placeholder {
+      color: #666;
+    }
+
+    small#emailCheck {
+      display: block;
+      margin-top: 5px;
+      font-size: 13px;
+      color: #d90429;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005f87;
+    }
+
+    .options, .back-link {
+      margin-top: 1rem;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    a {
+      color: #0077b6;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>User Login</h2>
+
+    <!-- Flash messages from backend -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form id="loginForm" method="POST" action="{{ url_for('user_login') }}">
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        <small id="emailCheck"></small>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="options">
+      Don’t have an account? <a href="{{ url_for('user_register') }}">Register here</a>
+    </div>
+
+    <div class="back-link">
+      <a href="{{ url_for('index') }}">Home</a>
+    </div>
+  </div>
+
+  <script>
+    // AJAX email check
+    $(document).ready(function(){
+      $("#email").on("blur", function(){
+        let email = $(this).val().trim();
+        if(email){
+          $.get("{{ url_for('user_register') }}", { email: email }, function(data){
+            if(data.exists){
+              $("#emailCheck").text("⚠️ This email is  registered. Please sign up first.");
+            } else {
+              $("#emailCheck").text("");
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

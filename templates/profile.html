@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #0077b6;
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 600;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .back-link a {
+      color: white;
+      background-color: #00b4d8;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+      display: inline-block;
+    }
+
+    .back-link a:hover {
+      background-color: #0096c7;
+    }
+
+    .profile-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 5px solid #0077b6;
+      object-fit: cover;
+    }
+
+    .avatar h3 {
+      margin-top: 15px;
+      color: #0077b6;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .details {
+      display: grid;
+      gap: 18px;
+    }
+
+    .info-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-group label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .info-group input {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      font-size: 15px;
+      transition: border 0.3s;
+    }
+
+    .info-group input:focus {
+      border-color: #00b4d8;
+      outline: none;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      background-color: #0077b6;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .actions button:hover {
+      background-color: #023e8a;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div>
+      <h1>My Profile</h1>
+      <p>Manage your account details and preferences</p>
+    </div>
+    <div class="back-link">
+      <a href="{{ url_for('main_dashboard') }}">← Back to Dashboard</a>
+    </div>
+  </header>
+
+  <!-- Profile Section -->
+  <div class="profile-container">
+    <div class="avatar">
+      <img src="https://i.pravatar.cc/140?u={{ user.id }}" alt="Profile Picture">
+      <h3>{{ user.name }}</h3>
+    </div>
+    <form method="POST" action="{{ url_for('update_profile') }}">
+      <div class="details">
+        <div class="info-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" value="{{ user.name }}">
+        </div>
+        <div class="info-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="{{ user.email }}">
+        </div>
+        <div class="info-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" value="{{ user.phone or '' }}">
+        </div>
+        <div class="info-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" value="{{ user.location or '' }}">
+        </div>
+        <div class="actions">
+          <button type="submit">💾 Update Profile</button>
+          <a href="{{ url_for('change_password') }}">
+            <button type="button">🔑 Change Password</button>
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Tourism Management System
+  </footer>
+
+</body>
+</html>

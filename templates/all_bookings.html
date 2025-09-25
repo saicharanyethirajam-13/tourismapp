@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Reports - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(to right, #eef7ff, #e0f7fa);
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #023e8a;
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: white;
+      margin: 10px 0;
+      display: block;
+      font-size: 15px;
+      transition: background-color 0.3s, color 0.3s;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background-color: #0077b6;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #023e8a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    th {
+      background-color: #caf0f8;
+      color: #003049;
+    }
+
+    td {
+      color: #333;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .status-positive {
+      background-color: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .status-neutral {
+      background-color: #fff3cd;
+      color: #664d03;
+    }
+
+    .status-negative {
+      background-color: #f8d7da;
+      color: #842029;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>🛠️ Admin Panel</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+    <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
+    <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
+    <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
+    <a href="{{ url_for('feedback_reports') }}" class="nav-link active">📝 Feedback</a>
+    <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="header">
+      <h1>Feedback Reports</h1>
+    </div>
+
+    <div class="search-bar">
+      <form method="GET" action="{{ url_for('feedback_reports') }}">
+        <input type="text" name="q" placeholder="Search by user or feedback..." value="{{ request.args.get('q', '') }}">
+      </form>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Rating</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for feedback in feedbacks %}
+        <tr>
+          <td>{{ feedback.id }}</td>
+          <td>{{ feedback.user_name }}</td>
+          <td>{{ feedback.user_email }}</td>
+          <td>{{ feedback.message }}</td>
+          <td>{{ feedback.rating }}/5</td>
+          <td>
+            {% if feedback.rating >= 4 %}
+              <span class="status-badge status-positive">Positive</span>
+            {% elif feedback.rating == 3 %}
+              <span class="status-badge status-neutral">Neutral</span>
+            {% else %}
+              <span class="status-badge status-negative">Negative</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 20px;">No feedback reports found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <footer>
+      &copy; 2025 Tourism Management System. Admin Panel.
+    </footer>
+  </main>
+
+</body>
+</html>

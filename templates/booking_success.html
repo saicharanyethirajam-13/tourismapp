@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Successful</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      max-width: 500px;
+      width: 100%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .icon {
+      font-size: 60px;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #004080;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 25px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-btn {
+      background: #0077b6;
+      color: white;
+    }
+
+    .dashboard-btn:hover {
+      background: #005f8f;
+    }
+
+    .bookings-btn {
+      background: #28a745;
+      color: white;
+    }
+
+    .bookings-btn:hover {
+      background: #218838;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="icon">✅</div>
+    <h2>Booking Confirmed!</h2>
+    <p>Your travel package has been successfully booked. We’ve sent a confirmation email with all the details.</p>
+    
+    <div class="btn-group">
+      <a href="{{ url_for('main_dashboard') }}" class="dashboard-btn">🏠 Back to Dashboard</a>
+      <a href="{{ url_for('my_bookings') }}" class="bookings-btn">📌 View My Bookings</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Packages - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(to right, #eef7ff, #e0f7fa);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(to bottom, #0077b6, #023e8a);
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 3px 0 10px rgba(0,0,0,0.15);
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: white;
+      margin: 8px 0;
+      display: block;
+      font-size: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Main */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #023e8a;
+    }
+
+    .btn-add {
+      background-color: #00b4d8;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .btn-add:hover {
+      background-color: #0077b6;
+    }
+
+    /* Search */
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 350px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    th {
+      background-color: #caf0f8;
+      color: #003049;
+    }
+
+    td {
+      color: #333;
+    }
+
+    .actions a button,
+    .actions form button {
+      background-color: #00b4d8;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      margin-right: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: opacity 0.3s;
+    }
+
+    .actions form button.delete {
+      background-color: #f94144;
+    }
+
+    .actions a button:hover,
+    .actions form button:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn-add {
+        width: 100%;
+        text-align: center;
+      }
+
+      .search-bar input {
+        width: 100%;
+      }
+
+      table {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>🛠️ Admin Panel</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+    <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
+    <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
+    <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
+    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback Reports</a>
+    <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="header">
+      <h1>Manage Tour Packages</h1>
+      <a href="{{ url_for('add_package') }}">
+        <button class="btn-add">+ Add New Package</button>
+      </a>
+    </div>
+
+    <!-- Search -->
+    <form method="GET" action="{{ url_for('admin_packages') }}" class="search-bar">
+      <input type="text" name="search" placeholder="Search by destination or ID..." value="{{ request.args.get('search', '') }}">
+    </form>
+
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Destination</th>
+          <th>Price</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for package in packages %}
+        <tr>
+          <td>{{ package.id }}</td>
+          <td>{{ package.destination }}</td>
+          <td>₹{{ "{:,}".format(package.price) }}</td>
+          <td>{{ package.duration }}</td>
+          <td>{{ package.status }}</td>
+          <td class="actions">
+            <a href="{{ url_for('edit_package', package_id=package.id) }}">
+              <button type="button">Edit</button>
+            </a>
+            <form action="{{ url_for('delete_package', package_id=package.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this package?')">
+              <button type="submit" class="delete">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 20px;">No packages found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <footer>
+      &copy; 2025 Tourism Management System. Admin Panel.
+    </footer>
+  </main>
+
+</body>
+</html>

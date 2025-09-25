@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Package - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(to right, #eef7ff, #e0f7fa);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(to bottom, #0077b6, #023e8a);
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 3px 0 10px rgba(0,0,0,0.15);
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: white;
+      margin: 8px 0;
+      display: block;
+      font-size: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #023e8a;
+    }
+
+    /* Form */
+    form {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #023e8a;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: border 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #00b4d8;
+      outline: none;
+    }
+
+    button {
+      background-color: #00b4d8;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #0077b6;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 20px;
+      }
+
+      form {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>🛠️ Admin Panel</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+    <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
+    <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
+    <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
+    <a href="{{ url_for('admin_payments') }}" class="nav-link">💳 Payments</a>
+    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback Reports</a>
+    <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="header">
+      <h1>Edit Tour Package</h1>
+    </div>
+
+    <!-- Edit Form -->
+    <form method="POST" action="{{ url_for('edit_package', package_id=package.id) }}">
+      <label for="title">Package Title</label>
+      <input type="text" id="title" name="title" value="{{ package.title }}" required>
+
+      <label for="destination">Destination</label>
+      <input type="text" id="destination" name="destination" value="{{ package.destination }}" required>
+
+      <label for="price">Price (₹)</label>
+      <input type="number" id="price" name="price" value="{{ package.price }}" min="0" required>
+
+      <label for="duration">Duration</label>
+      <input type="text" id="duration" name="duration" value="{{ package.duration }}" required>
+
+      <label for="description">Package Description</label>
+      <textarea id="description" name="description" rows="4">{{ package.description }}</textarea>
+
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="active" {% if package.status == 'active' %}selected{% endif %}>Active</option>
+        <option value="inactive" {% if package.status == 'inactive' %}selected{% endif %}>Inactive</option>
+      </select>
+
+      <button type="submit">💾 Update Package</button>
+    </form>
+
+    <footer>
+      &copy; 2025 Tourism Management System. Admin Panel.
+    </footer>
+  </main>
+
+</body>
+</html>

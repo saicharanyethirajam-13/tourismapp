@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Profile - Tourism Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(to right, #e0f7fa, #eef7ff);
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #023e8a;
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: white;
+      margin: 10px 0;
+      display: block;
+      font-size: 15px;
+      transition: color 0.3s;
+    }
+    .nav-link:hover {
+      color: #90e0ef;
+    }
+    .main-content {
+      flex: 1;
+      padding: 40px;
+    }
+    .profile-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0077b6;
+    }
+    .profile-details h1 {
+      font-size: 24px;
+      color: #023e8a;
+    }
+    .profile-details p {
+      font-size: 14px;
+      color: #555;
+    }
+    .info-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .info-item {
+      background-color: #f1faff;
+      padding: 16px;
+      border-radius: 12px;
+      border-left: 5px solid #00b4d8;
+    }
+    .info-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #0077b6;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .actions a {
+      padding: 10px 18px;
+      border: none;
+      background-color: #0077b6;
+      color: white;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s;
+    }
+    .actions a:hover {
+      background-color: #023e8a;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .stat-box {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    .stat-box h3 {
+      color: #00b4d8;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .stat-box p {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+    }
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .actions {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>🛠️ Admin Panel</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+    <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
+    <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
+    <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
+    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback</a>
+    <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
+    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="profile-card">
+      <div class="profile-header">
+        <img src="{{ admin.avatar_url or url_for('static', filename='admin_default.png') }}" alt="Admin Avatar">
+        <div class="profile-details">
+          <h1>{{ admin.name or "Administrator" }}</h1>
+          <p>{{ admin.email or "No Email Provided" }}</p>
+        </div>
+      </div>
+
+      <div class="info-list">
+        <div class="info-item">
+          <strong>Full Name</strong>
+          {{ admin.name or "Administrator" }}
+        </div>
+        <div class="info-item">
+          <strong>Email</strong>
+          {{ admin.email or "Not Provided" }}
+        </div>
+        <div class="info-item">
+          <strong>Phone</strong>
+          {{ admin.phone or "Not Provided" }}
+        </div>
+        <div class="info-item">
+          <strong>Role</strong>
+          {{ admin.role or "Admin" }}
+        </div>
+      </div>
+
+      <div class="actions">
+        <a href="{{ url_for('edit_admin_profile') }}">✏️ Edit Profile</a>
+        <a href="{{ url_for('change_password') }}">🔒 Change Password</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <h3>Total Packages</h3>
+          <p>{{ stats.total_packages or 0 }}</p>
+        </div>
+        <div class="stat-box">
+          <h3>Total Bookings</h3>
+          <p>{{ stats.total_bookings or 0 }}</p>
+        </div>
+        <div class="stat-box">
+          <h3>Feedbacks</h3>
+          <p>{{ stats.total_feedbacks or 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2025 Tourism Management System. Admin Panel.
+    </footer>
+  </main>
+
+</body>
+</html>

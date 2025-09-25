@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us - Tourism Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5faff;
+      color: #333;
+    }
+
+    header {
+      background: #0066cc;
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .home-btn {
+      background: white;
+      color: #0066cc;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .home-btn:hover {
+      background: #e0ecff;
+      color: #004c99;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      color: #0066cc;
+      margin-bottom: 1rem;
+    }
+
+    .intro {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .intro p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: #0099ff;
+      font-weight: bold;
+    }
+
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .team-member {
+      background: white;
+      padding: 1rem;
+      width: 220px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .team-member img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+
+    .team-member h4 {
+      margin: 0.5rem 0 0.3rem;
+      color: #0066cc;
+    }
+
+    .team-member p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .cta {
+      text-align: center;
+      background: #e8f3ff;
+      padding: 2rem;
+      border-radius: 10px;
+    }
+
+    .cta a {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      background: #0077cc;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .cta a:hover {
+      background: #005fa3;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-link a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>About Us</h1>
+    <a href="{{ url_for('index') }}" class="home-btn">🏠 Home</a>
+  </header>
+
+  <main>
+
+    <section class="intro">
+      <h2>Welcome to Tourism Management System!</h2>
+      <p>We are passionate about crafting unforgettable travel experiences. Our team of enthusiastic explorers and planners helps you <span class="highlight">discover the world</span> through expertly designed tour packages. From romantic getaways to thrilling adventures — we’ve got it all!</p>
+    </section>
+
+    <section>
+      <h2>Our Mission</h2>
+      <p>To make travel accessible, joyful, and memorable for everyone by offering carefully curated travel experiences and top-tier customer service.</p>
+    </section>
+
+    <section>
+      <h2>Our Vision</h2>
+      <p>To become a global leader in tourism by blending technology and personal touch — ensuring travelers feel at home wherever they go.</p>
+    </section>
+
+    <section>
+      <h2>Meet Our Team</h2>
+      <div class="team">
+        <div class="team-member">
+          <img src="https://i.pravatar.cc/80?img=12" alt="John">
+          <h4>John Doe</h4>
+          <p>Founder & CEO</p>
+        </div>
+        <div class="team-member">
+          <img src="https://i.pravatar.cc/80?img=5" alt="Jane">
+          <h4>Jane Smith</h4>
+          <p>Head of Operations</p>
+        </div>
+        <div class="team-member">
+          <img src="https://i.pravatar.cc/80?img=8" alt="Amit">
+          <h4>Amit Verma</h4>
+          <p>Tour Planner</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="back-link">
+      <a href="{{ url_for('index') }}">← Back to Home</a>
+    </div>
+
+  </main>
+
+</body>
+</html>

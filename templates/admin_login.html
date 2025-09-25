@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right top, #dee2ff, #cddafd, #a9def9, #89f7fe);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      color: #fff;
+      z-index: 1;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #1b1b1b;
+    }
+
+    .flash {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .flash.error { background-color: #ffdddd; color: #a30000; }
+    .flash.success { background-color: #ddffdd; color: #006600; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #333;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #555;
+    }
+
+    small#emailCheck {
+      display: block;
+      margin: 5px 0 15px;
+      font-size: 13px;
+      color: #d90429;
+    }
+
+    button {
+      width: 100%;
+      background: #00b4d8;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #0077b6;
+    }
+
+    .options {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .options a {
+      color: #0000ee;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Admin Login</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <label for="email">Admin Email</label>
+      <input type="text" id="email" name="email" placeholder="Enter admin email" required />
+      <small id="emailCheck"></small>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" placeholder="Enter password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="options">
+      Don’t have an account?
+      <a href="{{ url_for('admin_register') }}">Register here</a>
+    </div>
+
+    <div class="back-link">
+      <a href="{{ url_for('index') }}">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // AJAX check for admin email existence
+    $(document).ready(function(){
+      $("#email").on("blur", function(){
+        let email = $(this).val().trim();
+        if(email){
+          $.get("{{ url_for('admin_register') }}", { email: email }, function(data){
+            if(data.exists){
+              $("#emailCheck").text("⚠️ This admin email is registered.");
+            } else {
+              $("#emailCheck").text("");
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right top, #dee2ff, #cddafd, #a9def9, #89f7fe);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .register-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+      color: #fff;
+      z-index: 1;
+    }
+
+    .register-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #1b1b1b;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #333;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #555;
+    }
+
+    button {
+      width: 100%;
+      background: #00b4d8;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #0077b6;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error, .success {
+      font-size: 13px;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .error {
+      background-color: rgba(255, 0, 0, 0.15);
+      color: #b00020;
+    }
+
+    .success {
+      background-color: rgba(0, 255, 0, 0.15);
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-box">
+    <h2>Admin Register</h2>
+
+    <!-- Flask flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="{{ 'success' if category == 'success' else 'error' }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_register') }}" onsubmit="return validatePasswords()">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter full name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required />
+
+      <label for="confirm_password">Confirm Password</label>
+      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required />
+
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="back-link">
+      <a href="{{ url_for('admin_login') }}">&larr; Back to Admin Login</a>
+    </div>
+  </div>
+
+  <script>
+    function validatePasswords() {
+      const pwd = document.getElementById("password").value;
+      const cpwd = document.getElementById("confirm_password").value;
+
+      if (pwd !== cpwd) {
+        alert("Passwords do not match!");
+        return false;
+      }
+      return true;
+    }
+  </script>
+
+</body>
+</html>
