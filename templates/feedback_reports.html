@@ -172,11 +172,11 @@
       <tbody>
         {% for feedback in feedbacks %}
         <tr>
-          <td>{{ feedback['name'] }}</td>
-          <td>{{ feedback['email'] }}</td>
+          <td>{{ feedback['user_name'] }}</td>
+          <td>{{ feedback['user_email'] }}</td>
           <td>{{ feedback['subject'] }}</td>
           <td>{{ feedback['message'] }}</td>
-          <td>{{ feedback['submitted_on'] }}</td>
+          <td>{{ feedback['created_at'] }}</td>
         </tr>
         {% else %}
         <tr>

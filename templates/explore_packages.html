@@ -31,7 +31,12 @@
       font-size: 26px;
     }
 
-    .back-btn-container {
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
       padding: 20px 40px 0;
     }
 
@@ -51,6 +56,36 @@
       background-color: #005f8d;
     }
 
+    .search-bar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 250px;
+      outline: none;
+    }
+
+    .search-bar button {
+      background-color: #00b4d8;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .search-bar button:hover {
+      background-color: #0077b6;
+    }
+
     .container {
       padding: 40px;
       display: grid;
@@ -66,7 +101,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       padding: 20px;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
-      position: relative;
     }
 
     .card:hover {
@@ -135,6 +169,22 @@
       padding: 15px;
       margin-top: auto;
     }
+
+    @media (max-width: 768px) {
+      .search-bar {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .search-bar input {
+        width: 100%;
+      }
+
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -143,8 +193,13 @@
     <h1>🌍 Explore Our Travel Packages</h1>
   </header>
 
-  <div class="back-btn-container">
+  <div class="top-bar">
     <a href="{{ url_for('main_dashboard') }}" class="back-btn">🔙 Back to Dashboard</a>
+
+    <form method="GET" action="{{ url_for('explore_packages') }}" class="search-bar">
+      <input type="text" name="q" placeholder="Search by title or location..." value="{{ q }}">
+      <button type="submit">Search</button>
+    </form>
   </div>
 
   <div class="container">
@@ -155,8 +210,8 @@
           <img src="{{ pkg.image_url }}" alt="{{ pkg.title }}">
         {% endif %}
         <h3>{{ pkg.title }}</h3>
-        <p><strong>Destination:</strong> {{ pkg.destination }}</p>
-        <p><strong>Duration:</strong> {{ pkg.duration }}</p>
+        <p><strong>Destination:</strong> {{ pkg.location }}</p>
+        <p><strong>Duration:</strong> {{ pkg.days }} Days</p>
         <p><strong>Status:</strong> {{ pkg.status }}</p>
         <p class="price">₹{{ pkg.price }}</p>
         <a href="{{ url_for('book_package', package_id=pkg.id) }}" class="book-btn">Book Now</a>

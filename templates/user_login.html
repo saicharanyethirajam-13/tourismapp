@@ -90,6 +90,7 @@
       margin-top: 5px;
       font-size: 13px;
       color: #d90429;
+      min-height: 18px;
     }
 
     button {
@@ -139,7 +140,7 @@
       {% endif %}
     {% endwith %}
 
-    <form id="loginForm" method="POST" action="{{ url_for('user_login') }}">
+    <form id="loginForm" method="POST" action="{{ url_for('login') }}">
       <div class="input-group">
         <label for="email">Email Address</label>
         <input type="email" id="email" name="email" placeholder="you@example.com" required />
@@ -153,27 +154,29 @@
     </form>
 
     <div class="options">
-      Don’t have an account? <a href="{{ url_for('user_register') }}">Register here</a>
+      Don’t have an account? <a href="{{ url_for('register') }}">Register here</a>
     </div>
 
     <div class="back-link">
-      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('index') }}">← Back to Home</a>
     </div>
   </div>
 
   <script>
-    // AJAX email check
+    // AJAX email existence check
     $(document).ready(function(){
       $("#email").on("blur", function(){
-        let email = $(this).val().trim();
+        const email = $(this).val().trim();
         if(email){
-          $.get("{{ url_for('user_register') }}", { email: email }, function(data){
+          $.get("{{ url_for('check_email') }}", { email: email }, function(data){
             if(data.exists){
-              $("#emailCheck").text("⚠️ This email is  registered. Please sign up first.");
+              $("#emailCheck").css("color", "#008000").text("✔ Email found. You can log in.");
             } else {
-              $("#emailCheck").text("");
+              $("#emailCheck").css("color", "#d90429").text("⚠️ Email not registered. Please sign up first.");
             }
           });
+        } else {
+          $("#emailCheck").text("");
         }
       });
     });

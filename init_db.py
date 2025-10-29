@@ -1,131 +1,164 @@
-import sqlite3
 import os
+import sqlite3
+import psycopg2
+from urllib.parse import urlparse
+from werkzeug.security import generate_password_hash
 
-# Ensure 'instance' directory exists
-os.makedirs('instance', exist_ok=True)
+# ------------------- Database Connection Setup -------------------
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# Path to database
-DB_PATH = os.path.join('instance', 'tourism.db')
+def get_connection():
+    """Return a database connection (PostgreSQL on cloud, SQLite locally)."""
+    if DATABASE_URL:
+        # ✅ Render / Cloud DB
+        result = urlparse(DATABASE_URL)
+        conn = psycopg2.connect(
+            database=result.path[1:],
+            user=result.username,
+            password=result.password,
+            host=result.hostname,
+            port=result.port
+        )
+    else:
+        # ✅ Local SQLite
+        os.makedirs("instance", exist_ok=True)
+        DB_PATH = os.path.join("instance", "tourism.db")
+        conn = sqlite3.connect(DB_PATH)
+    return conn
 
 
-def setup_database():
-    # Remove old DB if exists (clean reset during development)
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
-        print("🗑️ Old database removed.")
+# ------------------- Database Initialization -------------------
+def init_db():
+    conn = get_connection()
+    cur = conn.cursor()
 
-    # Connect to the database
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    # Use SERIAL for Postgres and AUTOINCREMENT for SQLite
+    id_type = "SERIAL PRIMARY KEY" if DATABASE_URL else "INTEGER PRIMARY KEY AUTOINCREMENT"
 
-    # Enable foreign key support
-    cursor.execute('PRAGMA foreign_keys = ON')
+    # Choose placeholder style
+    placeholder = "%s" if DATABASE_URL else "?"
 
-    # --- Create Tables ---
-    cursor.execute('''
+    # ---------- Table Creation ----------
+    cur.execute(f"""
     CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        id {id_type},
+        fullname TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT DEFAULT 'user',
+        password_hash TEXT NOT NULL,
         phone TEXT,
         location TEXT,
-        registration_date TEXT DEFAULT (datetime('now', 'localtime'))
-    )
-    ''')
-    print("✅ Created table: users")
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS admin (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS admins (
+        id {id_type},
+        fullname TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT DEFAULT 'admin',
-        registration_date TEXT DEFAULT (datetime('now', 'localtime'))
-    )
-    ''')
-    print("✅ Created table: admin")
+        password_hash TEXT NOT NULL,
+        phone TEXT,
+        role TEXT DEFAULT 'Administrator',
+        avatar_url TEXT DEFAULT '/static/admin_default.png',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
 
-    cursor.execute('''
+    cur.execute(f"""
     CREATE TABLE IF NOT EXISTS packages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id {id_type},
         title TEXT NOT NULL,
-        destination TEXT NOT NULL,
-        description TEXT NOT NULL,
-        price INTEGER NOT NULL,
-        duration TEXT NOT NULL,
+        location TEXT NOT NULL,
+        description TEXT,
+        price REAL NOT NULL,
+        days INTEGER NOT NULL,
         image_url TEXT,
-        status TEXT DEFAULT 'Available'
-    )
-    ''')
-    print("✅ Created table: packages")
+        status TEXT DEFAULT 'Available',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
 
-    cursor.execute('''
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS admin_activity (
+        id {id_type},
+        admin_id INTEGER,
+        role TEXT,
+        action TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    cur.execute(f"""
     CREATE TABLE IF NOT EXISTS bookings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id {id_type},
         user_id INTEGER NOT NULL,
         package_id INTEGER NOT NULL,
-        booked_on DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE
-    )
-    ''')
-    print("✅ Created table: bookings")
-
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS feedback (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        user_email TEXT NOT NULL,
-        subject TEXT NOT NULL,
+        email TEXT NOT NULL,
+        travel_date TEXT NOT NULL,
+        persons INTEGER NOT NULL,
+        status TEXT DEFAULT 'CONFIRMED',
+        booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS payments (
+        id {id_type},
+        booking_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        amount REAL NOT NULL,
+        payment_status TEXT DEFAULT 'SUCCESS',
+        payment_method TEXT DEFAULT 'ONLINE',
+        paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS feedback (
+        id {id_type},
+        user_name TEXT,
+        user_email TEXT,
+        subject TEXT,
         message TEXT NOT NULL,
-        submitted_on DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-    ''')
-    print("✅ Created table: feedback")
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
 
-    # --- Insert Default Data ---
-    try:
-        cursor.execute("""
-        INSERT INTO admin (name, email, password) 
-        VALUES ('Super Admin', 'admin@example.com', 'admin123')
-        """)
-        print("👑 Default admin inserted.")
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS cloud_activity (
+        id {id_type},
+        user_id INTEGER,
+        role TEXT,
+        action TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
 
-        cursor.execute("""
-        INSERT INTO users (name, email, password, role, phone, location)
-        VALUES ('Test User', 'user@example.com', 'user123', 'user', '9876543210', 'Delhi')
-        """)
-        print("🙋 Test user inserted.")
-
-        cursor.execute("""
-        INSERT INTO packages (title, destination, description, price, duration, image_url)
-        VALUES (
-            'Goa Beach Tour',
-            'Goa',
-            'Relax on the beaches of Goa with 3 nights stay and fun activities.',
-            12000,
-            '4 Days / 3 Nights',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e'
+    # ---------- Default Admin ----------
+    cur.execute("SELECT COUNT(*) FROM admins")
+    if cur.fetchone()[0] == 0:
+        cur.execute(
+            f"INSERT INTO admins(fullname, email, password_hash) VALUES ({placeholder}, {placeholder}, {placeholder})",
+            ("Admin", "admin@demo.com", generate_password_hash("admin123"))
         )
-        """)
-        print("🌴 Sample package inserted.")
-    except sqlite3.IntegrityError:
-        print("⚠️ Default data already exists, skipping inserts.")
+
+    # ---------- Demo Packages ----------
+    cur.execute("SELECT COUNT(*) FROM packages")
+    if cur.fetchone()[0] == 0:
+        demo = [
+            ("Beach Escape", "Goa", "3N/4D seaside fun", 12999, 4, "https://picsum.photos/seed/goa/800/500", "Available"),
+            ("Mountain Retreat", "Manali", "4N/5D snow experience", 17999, 5, "https://picsum.photos/seed/manali/800/500", "Available"),
+        ]
+        cur.executemany(
+            f"INSERT INTO packages(title, location, description, price, days, image_url, status) VALUES ({placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder})",
+            demo
+        )
 
     conn.commit()
     conn.close()
-    print("🎉 Database setup completed successfully.")
+    print("✅ Database initialized successfully!")
 
 
 if __name__ == "__main__":
-    setup_database()
-
-from app import db, app  # replace with your actual file name
-
-with app.app_context():
-    db.create_all()
-    print("✅ Database tables created!")
-
+    init_db()

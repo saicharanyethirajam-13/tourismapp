@@ -189,13 +189,13 @@
   <div class="profile-container">
     <div class="avatar">
       <img src="https://i.pravatar.cc/140?u={{ user.id }}" alt="Profile Picture">
-      <h3>{{ user.name }}</h3>
+      <h3>{{ user.fullname }}</h3>
     </div>
     <form method="POST" action="{{ url_for('update_profile') }}">
       <div class="details">
         <div class="info-group">
           <label for="name">Full Name</label>
-          <input type="text" id="name" name="name" value="{{ user.name }}">
+          <input type="text" id="name" name="name" value="{{ user.fullname }}">
         </div>
         <div class="info-group">
           <label for="email">Email</label>
@@ -211,9 +211,6 @@
         </div>
         <div class="actions">
           <button type="submit">💾 Update Profile</button>
-          <a href="{{ url_for('change_password') }}">
-            <button type="button">🔑 Change Password</button>
-          </a>
         </div>
       </div>
     </form>

@@ -33,9 +33,9 @@
     <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
     <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
     <a href="{{ url_for('view_users') }}" class="nav-link active">👥 View Users</a>
-    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback</a>
+    <a href="{{ url_for('feedback_reports') }}" class="nav-link">📝 Feedback</a>
     <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
-    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+    <a href="{{ url_for('index') }}" class="nav-link">🚪 Logout</a>
   </aside>
 
   <main class="main-content">
@@ -49,12 +49,12 @@
         {% for user in users %}
           <tr>
             <td>{{ user.id }}</td>
-            <td>{{ user.full_name or "N/A" }}</td>
+            <td>{{ user.fullname or "N/A" }}</td>
             <td>{{ user.email or "N/A" }}</td>
             <td>{{ user.phone or "N/A" }}</td>
             <td>
-              {% if user.registration_date %}
-                {{ user.registration_date.strftime('%Y-%m-%d') if user.registration_date.__class__.__name__ == "datetime" else user.registration_date }}
+              {% if user.created_at %}
+                {{ user.created_at.strftime('%Y-%m-%d') if user.created_at.__class__.__name__ == "datetime" else user.created_at }}
               {% else %}
                 N/A
               {% endif %}

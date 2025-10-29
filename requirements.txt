@@ -2,3 +2,6 @@ Flask
 gunicorn
 Flask-SQLAlchemy
 psycopg2-binary
+werkzeug
+sqlite3
+Pillow

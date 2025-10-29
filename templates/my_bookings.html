@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>My Bookings - Tourism Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -66,18 +67,19 @@
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(10px);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-6px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.2);
     }
 
     .card img {
@@ -128,10 +130,22 @@
       font-weight: 600;
       text-decoration: none;
       font-size: 15px;
+      transition: color 0.3s ease;
     }
 
     .back-link a:hover {
+      color: #0077b6;
       text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -153,8 +167,8 @@
         <div class="card-content">
           <h3>{{ booking['title'] }}</h3>
           <p>{{ booking['description'] }}</p>
-          <p class="details"><strong>Date:</strong> {{ booking['travel_date'] }}</p>
-          <p class="details"><strong>Persons:</strong> {{ booking['persons'] }}</p>
+          <p class="details"><strong>Date:</strong> {{ booking['travel_date'] or 'N/A' }}</p>
+          <p class="details"><strong>Persons:</strong> {{ booking['persons'] or '-' }}</p>
           <p class="details"><strong>Status:</strong> {{ booking['status'] or 'Confirmed' }}</p>
           <div class="price">₹{{ "{:,}".format(booking['price'] or 0) }}</div>
         </div>

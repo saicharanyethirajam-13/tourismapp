@@ -37,46 +37,31 @@
     <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
     <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
     <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
-    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback Reports</a>
+    <a href="{{ url_for('feedback_reports') }}" class="nav-link">📝 Feedback Reports</a>
     <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
-    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+    <a href="{{ url_for('index') }}" class="nav-link">🚪 Logout</a>
   </aside>
 
   <main class="main-content">
     <div class="header">
       <div>
-        <h1>Welcome, {{ admin_name or "Admin" }} 👋</h1>
+        <h1>Welcome, {{ admin_name }} 👋</h1>
         <p>Here’s an overview of the system activity.</p>
       </div>
       <div class="admin-profile">
-        <img src="{{ admin_avatar_url or url_for('static', filename='admin_default.png') }}" alt="Admin Profile">
+        <img src="{{ admin_avatar_url }}" alt="Admin Profile">
         <div>
-          <strong>{{ admin_name or "Admin" }}</strong><br>
-          <small>{{ admin_email or "admin@example.com" }}</small>
+          <strong>{{ admin_name }}</strong><br>
+          <small>{{ admin_email }}</small>
         </div>
       </div>
     </div>
 
     <section class="stats">
-      <div class="stat-card"><h3>Total Users</h3><p>{{ total_users or 0 }}</p></div>
-      <div class="stat-card"><h3>Total Bookings</h3><p>{{ total_bookings or 0 }}</p></div>
-      <div class="stat-card"><h3>Revenue</h3><p>₹{{ "{:,}".format(total_revenue or 0) }}</p></div>
-      <div class="stat-card"><h3>Pending Approvals</h3><p>{{ pending_approvals or 0 }}</p></div>
-    </section>
-
-    <section class="card-section">
-      <div class="card">
-        <h2>🔔 System Alerts</h2>
-        <p>{{ system_alerts or "No new alerts today." }}</p>
-      </div>
-      <div class="card">
-        <h2>📬 Messages</h2>
-        <p>{{ new_messages or 0 }} new queries received via Contact Us form.</p>
-      </div>
-      <div class="card">
-        <h2>📝 Notes</h2>
-        <p>{{ admin_notes or "No notes available." }}</p>
-      </div>
+      <div class="stat-card"><h3>Total Users</h3><p>{{ total_users }}</p></div>
+      <div class="stat-card"><h3>Total Bookings</h3><p>{{ total_bookings }}</p></div>
+      <div class="stat-card"><h3>Total Revenue</h3><p>₹{{ "{:,}".format(total_revenue or 0) }}</p></div>
+      <div class="stat-card"><h3>Messages</h3><p>{{ new_messages }}</p></div>
     </section>
 
     <footer>&copy; 2025 Tourism Management System. Admin Panel.</footer>

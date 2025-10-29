@@ -160,9 +160,9 @@
     <a href="{{ url_for('all_bookings') }}" class="nav-link">📁 View Bookings</a>
     <a href="{{ url_for('admin_packages') }}" class="nav-link">🎒 Manage Packages</a>
     <a href="{{ url_for('view_users') }}" class="nav-link">👥 View Users</a>
-    <a href="{{ url_for('view_feedback') }}" class="nav-link">📝 Feedback</a>
+    <a href="{{ url_for('feedback_reports') }}" class="nav-link">📝 Feedback</a>
     <a href="{{ url_for('admin_profile') }}" class="nav-link">👤 Admin Profile</a>
-    <a href="{{ url_for('logout') }}" class="nav-link">🚪 Logout</a>
+    <a href="{{ url_for('index') }}" class="nav-link">🚪 Logout</a>
   </aside>
 
   <main class="main-content">
@@ -170,7 +170,7 @@
       <div class="profile-header">
         <img src="{{ admin.avatar_url or url_for('static', filename='admin_default.png') }}" alt="Admin Avatar">
         <div class="profile-details">
-          <h1>{{ admin.name or "Administrator" }}</h1>
+          <h1>{{ admin.fullname or "Administrator" }}</h1>
           <p>{{ admin.email or "No Email Provided" }}</p>
         </div>
       </div>
@@ -178,7 +178,7 @@
       <div class="info-list">
         <div class="info-item">
           <strong>Full Name</strong>
-          {{ admin.name or "Administrator" }}
+          {{ admin.fullname or "Administrator" }}
         </div>
         <div class="info-item">
           <strong>Email</strong>

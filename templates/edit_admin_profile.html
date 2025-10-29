@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Change Password</title>
+  <title>Edit Admin Profile</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_style.css') }}">
   <style>
     body {
@@ -67,12 +67,12 @@
       transition: 0.3s;
     }
 
-    .btn-change {
+    .btn-save {
       background-color: #45a29e;
       color: white;
     }
 
-    .btn-change:hover {
+    .btn-save:hover {
       background-color: #66fcf1;
       color: #000;
     }
@@ -96,7 +96,7 @@
 <body>
 
   <div class="container">
-    <h2>Change Password</h2>
+    <h2>Edit Admin Profile</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -107,17 +107,17 @@
     {% endwith %}
 
     <form method="POST">
-      <label for="current_password">Current Password</label>
-      <input type="password" id="current_password" name="current_password" required>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" value="{{ admin.fullname }}" required>
 
-      <label for="new_password">New Password</label>
-      <input type="password" id="new_password" name="new_password" required>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" value="{{ admin.email }}" required>
 
-      <label for="confirm_password">Confirm New Password</label>
-      <input type="password" id="confirm_password" name="confirm_password" required>
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" name="phone" value="{{ admin.phone }}">
 
       <div class="btn-container">
-        <button type="submit" class="btn btn-change">🔒 Update Password</button>
+        <button type="submit" class="btn btn-save">💾 Save Changes</button>
         <a href="{{ url_for('admin_profile') }}" class="btn btn-cancel">⬅ Cancel</a>
       </div>
     </form>

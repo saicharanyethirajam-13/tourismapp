@@ -32,7 +32,7 @@
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(10px);
       padding: 40px 30px;
       border-radius: 16px;
@@ -48,10 +48,11 @@
       font-size: 26px;
       color: #003566;
       margin-bottom: 24px;
+      font-weight: 700;
     }
 
     .input-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       text-align: left;
     }
 
@@ -75,14 +76,18 @@
     input:focus {
       border-color: #0077b6;
       outline: none;
-      box-shadow: 0 0 10px rgba(0, 119, 182, 0.2);
+      box-shadow: 0 0 10px rgba(0, 119, 182, 0.25);
     }
 
     .error-message {
       color: #d00000;
+      background: rgba(255, 255, 255, 0.6);
+      border-left: 4px solid #d00000;
+      padding: 8px 10px;
       font-size: 13px;
-      margin-bottom: 10px;
-      display: block;
+      margin-bottom: 14px;
+      border-radius: 6px;
+      text-align: left;
     }
 
     button {
@@ -96,11 +101,12 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 12px;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
 
     button:hover {
       background-color: #005f8f;
+      transform: translateY(-2px);
     }
 
     p {
@@ -133,15 +139,13 @@
 
     <!-- Error placeholder -->
     {% if error %}
-    <div id="errorMessage" class="error-message">
-      {{ error }}
-    </div>
+    <div class="error-message">{{ error }}</div>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('user_register') }}">
+    <form method="POST" action="{{ url_for('register') }}">
       <div class="input-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" placeholder="John Doe" required>
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="John Doe" required>
       </div>
 
       <div class="input-group">
@@ -157,8 +161,8 @@
       <button type="submit">Register</button>
     </form>
     
-    <p>Already have an account? <a href="{{ url_for('user_login') }}">Login here</a></p>
-    <p><a href="{{ url_for('index') }}">← Back to Home</a></p>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    <p><a href="{{ url_for('login') }}">← Back</a></p>
   </div>
 
 </body>
